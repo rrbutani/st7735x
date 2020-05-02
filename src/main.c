@@ -826,6 +826,12 @@ const uint16_t Logo[] = {
     0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF,
     0xFFFF};
 
+#define main2(...) main(__VA_ARGS__)
+
+// #define SCREEN_INIT ST7735_InitR(INITR_GREENTAB);
+#define SCREEN_INIT ST7735_InitR(INITR_REDTAB);
+// #define SCREEN_INIT ST7735_InitB();
+
 int main0(void) {
   PLL_Init(Bus80MHz);  // set system clock to 80 MHz
   Output_Init();
@@ -833,10 +839,10 @@ int main0(void) {
   while (1) {
   }
 }
-int main(void) {
+int main1(void) {
   uint32_t j;          // main 1
   PLL_Init(Bus80MHz);  // set system clock to 80 MHz
-  ST7735_InitR(INITR_REDTAB);
+  SCREEN_INIT;
   ST7735_OutString("Graphics test\n");
   ST7735_OutString("cubic function\n");
   ST7735_PlotClear(0, 4095);  // range from 0 to 4095
@@ -851,7 +857,7 @@ int main(void) {
 int main7(void) {
   int i;               // main 7
   PLL_Init(Bus80MHz);  // set system clock to 80 MHz
-  ST7735_InitR(INITR_REDTAB);
+  SCREEN_INIT;
   ST7735_FillRect(20, 20, 2, 2, ST7735_YELLOW);
   for (i = 0; i < 80; i++) {
     ST7735_FillRect(i, 2 * i, 2, 2, ST7735_MAGENTA);
@@ -864,7 +870,7 @@ int main2(void) {  // main 2
   //  uint8_t red, green, blue;
   PLL_Init(Bus80MHz);  // set system clock to 80 MHz
   // test DrawChar() and DrawCharS()
-  ST7735_InitR(INITR_REDTAB);
+  SCREEN_INIT;
   ST7735_DrawSmallCircle(10, 20, ST7735_Color565(0, 255, 0));
   ST7735_DrawCircle(50, 20, ST7735_Color565(255, 0, 0));
   ST7735_DrawCharS(0, 0, 'c', ST7735_Color565(255, 0, 0), 0, 1);
@@ -962,10 +968,10 @@ int main2(void) {  // main 2
     ST7735_DrawBitmap(x, y, Logo, 40, 160);
     x = x + dx;
     y = y + dy;
-    if ((x >= (ST7735_TFTWIDTH - 40 + 15)) || (x <= -15)) {
+    if ((x >= (ST7735_Width() - 40 + 15)) || (x <= -15)) {
       dx = -1 * dx;
     }
-    if ((y >= (ST7735_TFTHEIGHT + 8)) || (y <= (ST7735_TFTHEIGHT - 8))) {
+    if ((y >= (ST7735_Height() + 8)) || (y <= (ST7735_Height() - 8))) {
       dy = -1 * dy;
     }
   }
@@ -973,10 +979,10 @@ int main2(void) {  // main 2
 // private function draws a color band on the screen
 void static drawthecolors(uint8_t red, uint8_t green, uint8_t blue) {
   static uint16_t y = 0;
-  ST7735_DrawFastHLine(0, y, ST7735_TFTWIDTH,
+  ST7735_DrawFastHLine(0, y, ST7735_Width(),
                        ST7735_Color565(red, green, blue));
   y = y + 1;
-  if (y >= ST7735_TFTHEIGHT) {
+  if (y >= ST7735_Height()) {
     y = 0;
   }
   DelayWait10ms(1);
@@ -985,7 +991,7 @@ int main3(void) {  // main3
   uint8_t red, green, blue;
   PLL_Init(Bus80MHz);  // set system clock to 80 MHz
   // test DrawChar() and DrawCharS()
-  ST7735_InitR(INITR_REDTAB);
+  SCREEN_INIT;
 
   // test display with a colorful demo
   red = 255;
