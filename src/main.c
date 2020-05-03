@@ -1024,6 +1024,31 @@ int main3(void) {  // main3
     }
   }
 }
+
+#define BORDER_WIDTH 1
+
+int main8(void) {
+    PLL_Init(Bus80MHz);
+    SCREEN_INIT;
+
+    ST7735_PlotClear(0, ST7735_Height() - 1);
+
+    for (int x = 0; x < ST7735_Width(); x++) {
+        for (int y = 0; y < ST7735_Height(); y++) {
+            uint16_t colour = ST7735_GREEN;
+
+            if (x <= (BORDER_WIDTH - 1) || x >= (ST7735_Width() - BORDER_WIDTH)
+                || y <= (BORDER_WIDTH - 1) || y >= (ST7735_Height() - BORDER_WIDTH))
+                colour = ST7735_RED;
+
+            ST7735_DrawPixel(x, y, colour);
+        }
+        DelayWait10ms(1);
+    }
+
+    return 0;
+}
+
 void BookExamples(void) {  // examples from the book
   int8_t cc = 0x56;        // (‘V’)
   int32_t xx = 100;
