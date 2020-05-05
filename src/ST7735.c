@@ -1,9 +1,12 @@
 /***************************************************
-  This is a library for the Adafruit 1.8" SPI display.
+  This is a library for the Adafruit 1.8" SPI display
+  or the Adafruit 1.44" display.
   This library works with the Adafruit 1.8" TFT Breakout w/SD card
   ----> http://www.adafruit.com/products/358
-  as well as Adafruit raw 1.8" TFT display
+  as well as the Adafruit raw 1.8" TFT display
   ----> http://www.adafruit.com/products/618
+  as well as the Adafruit 1.44" TFT Breakout w/SD card
+  ----> https://www.adafruit.com/product/2088
 
   Check out the links above for our tutorials and wiring diagrams
   These displays use SPI to communicate, 4 or 5 pins are required to
@@ -20,12 +23,14 @@
 // Runs on LM4F120/TM4C123
 // Low level drivers for the ST7735 160x128 LCD based off of
 // the file described above.
-//    16-bit color, 128 wide by 160 high LCD
+//    16-bit color, 128 wide by 160 high LCD (1.8")
+//    or: 16-bit color, 128 wide by 128 high LCD (1.44")
 // Daniel Valvano
 // March 28, 2016
 // Augmented 7/17/2014 to have a simple graphics facility
 // Tested with LaunchPadDLL.dll simulator 9/2/2014
 // Modified for use of CS (simultaneous with other SPI slaves) 3/28/2016
+// Updated with 1.44" screen support on 5/5/2020
 
 /* This example accompanies the book
    "Embedded Systems: Real Time Interfacing to ARM Cortex M Microcontrollers",
