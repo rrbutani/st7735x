@@ -196,8 +196,6 @@ uint16_t StTextColor = ST7735_YELLOW;
                                        // PLL output (default)
 #define SYSCTL_RCGC1_SSI0 0x00000010   // SSI0 Clock Gating Control
 #define SYSCTL_RCGC2_GPIOA 0x00000001  // port A Clock Gating Control
-#define ST7735_TFTWIDTH 128
-#define ST7735_TFTHEIGHT 160
 
 #define ST7735_NOP 0x00
 #define ST7735_SWRESET 0x01
@@ -396,9 +394,17 @@ static uint8_t ColStart, RowStart;  // some displays need this changed
 static uint8_t Rotation;            // 0 to 3
 static enum initRFlags TabColor;
 static int16_t _width =
-    ST7735_TFTWIDTH;  // this could probably be a constant, except it is used in
-                      // Adafruit_GFX and depends on image rotation
-static int16_t _height = ST7735_TFTHEIGHT;
+    ST7735_18_TFTWIDTH;  // this could probably be a constant, except it is used
+                         // in Adafruit_GFX and depends on image rotation
+static int16_t _height = ST7735_18_TFTHEIGHT;
+
+uint16_t ST7735_Height(void) {
+    return _height;
+}
+
+uint16_t ST7735_Width(void) {
+    return _width;
+}
 
 // The Data/Command pin must be valid when the eighth bit is
 // sent.  The SSI module has hardware input and output FIFOs
@@ -1267,8 +1273,8 @@ void ST7735_SetRotation(uint8_t m) {
       } else {
         writedata(MADCTL_MX | MADCTL_MY | MADCTL_BGR);
       }
-      _width = ST7735_TFTWIDTH;
-      _height = ST7735_TFTHEIGHT;
+      _width = ST7735_18_TFTWIDTH;
+      _height = ST7735_18_TFTHEIGHT;
       break;
     case 1:
       if (TabColor == INITR_BLACKTAB) {
@@ -1276,8 +1282,8 @@ void ST7735_SetRotation(uint8_t m) {
       } else {
         writedata(MADCTL_MY | MADCTL_MV | MADCTL_BGR);
       }
-      _width = ST7735_TFTHEIGHT;
-      _height = ST7735_TFTWIDTH;
+      _width = ST7735_18_TFTHEIGHT;
+      _height = ST7735_18_TFTWIDTH;
       break;
     case 2:
       if (TabColor == INITR_BLACKTAB) {
@@ -1285,8 +1291,8 @@ void ST7735_SetRotation(uint8_t m) {
       } else {
         writedata(MADCTL_BGR);
       }
-      _width = ST7735_TFTWIDTH;
-      _height = ST7735_TFTHEIGHT;
+      _width = ST7735_18_TFTWIDTH;
+      _height = ST7735_18_TFTHEIGHT;
       break;
     case 3:
       if (TabColor == INITR_BLACKTAB) {
@@ -1294,8 +1300,8 @@ void ST7735_SetRotation(uint8_t m) {
       } else {
         writedata(MADCTL_MX | MADCTL_MV | MADCTL_BGR);
       }
-      _width = ST7735_TFTHEIGHT;
-      _height = ST7735_TFTWIDTH;
+      _width = ST7735_18_TFTHEIGHT;
+      _height = ST7735_18_TFTWIDTH;
       break;
   }
 

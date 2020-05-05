@@ -118,9 +118,11 @@ enum initRFlags{
   INITR_BLACKTAB
 };
 
-#define ST7735_TFTWIDTH  128
-#define ST7735_TFTHEIGHT 160
+#define ST7735_144_TFTWIDTH  128
+#define ST7735_144_TFTHEIGHT 128
 
+#define ST7735_18_TFTWIDTH  128
+#define ST7735_18_TFTHEIGHT 160
 
 // Color definitions
 #define ST7735_BLACK   0x0000
@@ -131,6 +133,9 @@ enum initRFlags{
 #define ST7735_MAGENTA 0xF81F
 #define ST7735_YELLOW  0x07FF
 #define ST7735_WHITE   0xFFFF
+
+uint16_t ST7735_Height(void);
+uint16_t ST7735_Width(void);
 
 //------------ST7735_InitB------------
 // Initialization for ST7735B screens.
