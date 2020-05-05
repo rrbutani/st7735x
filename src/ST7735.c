@@ -392,7 +392,7 @@ static const uint8_t Font[] = {
 
 static uint8_t ColStart, RowStart;  // some displays need this changed
 static uint8_t Rotation;            // 0 to 3
-static enum initRFlags TabColor;
+static enum initRFlags RFlags;
 static int16_t _width =
     ST7735_18_TFTWIDTH;  // this could probably be a constant, except it is used
                          // in Adafruit_GFX and depends on image rotation
@@ -585,23 +585,37 @@ static const uint8_t Rcmd1[] = {  // Init for 7735R, part 1 (red or green tab)
     ST7735_COLMOD,
     1,      // 15: set color mode, 1 arg, no delay:
     0x05};  //     16-bit color
-static const uint8_t Rcmd2green[] =
-    {       // Init for 7735R, part 2 (green tab only)
-        2,  //  2 commands in list:
-        ST7735_CASET,
-        4,  //  1: Column addr set, 4 args, no delay:
-        0x00,
-        0x02,  //     XSTART = 0
-        0x00,
-        0x7F + 0x02,  //     XEND = 127
-        ST7735_RASET,
-        4,  //  2: Row addr set, 4 args, no delay:
-        0x00,
-        0x01,  //     XSTART = 0
-        0x00,
-        0x9F + 0x01};                //     XEND = 159
-static const uint8_t Rcmd2red[] = {  // Init for 7735R, part 2 (red tab only)
-    2,                               //  2 commands in list:
+static const uint8_t Rcmd2green[] = { // Init for 7735R, part 2 (green tab only)
+    2,                                //  2 commands in list:
+    ST7735_CASET,
+    4,  //  1: Column addr set, 4 args, no delay:
+    0x00,
+    0x02,        //     XSTART = 0
+    0x00,
+    0x7F + 0x02, //     XEND = 127
+    ST7735_RASET,
+    4,  //  2: Row addr set, 4 args, no delay:
+    0x00,
+    0x01,        //     XSTART = 0
+    0x00,
+    0x9F + 0x01};//     XEND = 159
+static const uint8_t Rcmd2green_144[] = { // Init for 7735R, part 2 (1.44" green
+                                          // tab only)
+    2,                                    //  2 commands in list:
+    ST7735_CASET,
+    4,  //  1: Column addr set, 4 args, no delay:
+    0x00,
+    ST7735_144_GREENTAB_X_OFFSET,
+    0x00,
+    ST7735_144_TFTWIDTH + ST7735_144_GREENTAB_X_OFFSET,
+    ST7735_RASET,
+    4,  //  2: Row addr set, 4 args, no delay:
+    0x00,
+    ST7735_144_GREENTAB_Y_OFFSET,
+    0x00,
+    ST7735_144_TFTHEIGHT + ST7735_144_GREENTAB_Y_OFFSET};
+static const uint8_t Rcmd2red[] = { // Init for 7735R, part 2 (red tab only)
+    2,                              //  2 commands in list:
     ST7735_CASET,
     4,  //  1: Column addr set, 4 args, no delay:
     0x00,
@@ -761,6 +775,14 @@ void ST7735_InitR(enum initRFlags option) {
     commandList(Rcmd2green);
     ColStart = 2;
     RowStart = 1;
+  } else if (option == INITR_144_GREENTAB) {
+    commandList(Rcmd2green_144);
+
+    ColStart = ST7735_144_GREENTAB_X_OFFSET;
+    RowStart = ST7735_144_GREENTAB_Y_OFFSET;
+
+    _height = ST7735_144_TFTHEIGHT;
+    _width = ST7735_144_TFTWIDTH;
   } else {
     // colstart, rowstart left at default '0' values
     commandList(Rcmd2red);
@@ -768,11 +790,11 @@ void ST7735_InitR(enum initRFlags option) {
   commandList(Rcmd3);
 
   // if black, change MADCTL color filter
-  if (option == INITR_BLACKTAB) {
+  if (option == INITR_BLACKTAB || option == INITR_144_GREENTAB) {
     writecommand(ST7735_MADCTL);
     writedata(0xC0);
   }
-  TabColor = option;
+  RFlags = option;
   ST7735_SetCursor(0, 0);
   StTextColor = ST7735_YELLOW;
   ST7735_FillScreen(0);  // set screen to black
@@ -1268,7 +1290,7 @@ void ST7735_SetRotation(uint8_t m) {
   Rotation = m % 4;  // can't be higher than 3
   switch (Rotation) {
     case 0:
-      if (TabColor == INITR_BLACKTAB) {
+      if (RFlags == INITR_BLACKTAB) {
         writedata(MADCTL_MX | MADCTL_MY | MADCTL_RGB);
       } else {
         writedata(MADCTL_MX | MADCTL_MY | MADCTL_BGR);
@@ -1277,7 +1299,7 @@ void ST7735_SetRotation(uint8_t m) {
       _height = ST7735_18_TFTHEIGHT;
       break;
     case 1:
-      if (TabColor == INITR_BLACKTAB) {
+      if (RFlags == INITR_BLACKTAB) {
         writedata(MADCTL_MY | MADCTL_MV | MADCTL_RGB);
       } else {
         writedata(MADCTL_MY | MADCTL_MV | MADCTL_BGR);
@@ -1286,7 +1308,7 @@ void ST7735_SetRotation(uint8_t m) {
       _height = ST7735_18_TFTWIDTH;
       break;
     case 2:
-      if (TabColor == INITR_BLACKTAB) {
+      if (RFlags == INITR_BLACKTAB) {
         writedata(MADCTL_RGB);
       } else {
         writedata(MADCTL_BGR);
@@ -1295,7 +1317,7 @@ void ST7735_SetRotation(uint8_t m) {
       _height = ST7735_18_TFTHEIGHT;
       break;
     case 3:
-      if (TabColor == INITR_BLACKTAB) {
+      if (RFlags == INITR_BLACKTAB) {
         writedata(MADCTL_MX | MADCTL_MV | MADCTL_RGB);
       } else {
         writedata(MADCTL_MX | MADCTL_MV | MADCTL_BGR);
@@ -1645,6 +1667,7 @@ int ferror(FILE *f) {
 // Inputs: none
 // Outputs: none
 void Output_Init(void) {
+  // Change this to match your display!
   ST7735_InitR(INITR_REDTAB);
   ST7735_FillScreen(0);  // set screen to black
 }

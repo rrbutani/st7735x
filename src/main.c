@@ -2,7 +2,8 @@
 // Runs on LM4F120/TM4C123
 // Test the functions in ST7735.c by printing basic
 // patterns to the LCD.
-//    16-bit color, 128 wide by 160 high LCD
+//    16-bit color, 128 wide by 160 high LCD (1.8")
+//    or: 16-bit color, 128 wide by 128 high LCD (1.44")
 // Daniel Valvano
 // March 30, 2015
 
@@ -828,8 +829,10 @@ const uint16_t Logo[] = {
 
 #define main2(...) main(__VA_ARGS__)
 
-// #define SCREEN_INIT ST7735_InitR(INITR_GREENTAB);
 #define SCREEN_INIT ST7735_InitR(INITR_REDTAB);
+// #define SCREEN_INIT ST7735_InitR(INITR_GREENTAB);
+// #define SCREEN_INIT ST7735_InitR(INITR_BLACKTAB);
+// #define SCREEN_INIT ST7735_InitR(INITR_144_GREENTAB);
 // #define SCREEN_INIT ST7735_InitB();
 
 int main0(void) {
