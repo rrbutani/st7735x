@@ -1050,7 +1050,7 @@ int main8(void) {
 }
 
 void BookExamples(void) {  // examples from the book
-  int8_t cc = 0x56;        // (‘V’)
+  int8_t cc = 0x56;        // ('V')
   int32_t xx = 100;
   int16_t yy = -100;
   float zz = 3.14159265;
