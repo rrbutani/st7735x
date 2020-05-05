@@ -15,7 +15,8 @@ jobs:
       uses: rrbutani/tlt-github-action@0.4.2
       with:
         target: build
-    - name: Check
-      uses: rrbutani/tlt-github-action@0.4.2
-      with:
-        target: check
+    # Disable format checking for now:
+    # - name: Check
+    #   uses: rrbutani/tlt-github-action@0.4.2
+    #   with:
+    #     target: check
