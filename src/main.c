@@ -113,6 +113,7 @@ const uint16_t Test2[] = {0x0000, 0x4208, 0x8410, 0xC618, 0xFFFF, 0x001F,
                           0xF800, 0x0000, 0x001F, 0x07FF, 0x07E0, 0xF800,
                           0xFFFF, 0x001F, 0x07FF, 0x07E0, 0xF800, 0x0000};
 // 40x160 Longhorn logo
+// Note: actual size is 40 * 160 * 2...
 const uint16_t Logo[] = {
     0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF,
     0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF,
@@ -1040,8 +1041,10 @@ int main8(void) {
         for (int y = 0; y < ST7735_Height(); y++) {
             uint16_t colour = ST7735_GREEN;
 
-            if (x <= (BORDER_WIDTH - 1) || x >= (ST7735_Width() - BORDER_WIDTH)
-                || y <= (BORDER_WIDTH - 1) || y >= (ST7735_Height() - BORDER_WIDTH))
+            if (x <= (BORDER_WIDTH - 1)
+                || x >= (ST7735_Width() - BORDER_WIDTH)
+                || y <= (BORDER_WIDTH - 1)
+                || y >= (ST7735_Height() - BORDER_WIDTH))
                 colour = ST7735_RED;
 
             ST7735_DrawPixel(x, y, colour);

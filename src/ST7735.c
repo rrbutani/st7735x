@@ -1047,8 +1047,8 @@ void ST7735_DrawBitmap(int16_t x, int16_t y, const uint16_t *image, int16_t w,
   if ((x >= _width) || ((y - h + 1) >= _height) || ((x + w) <= 0) || (y < 0)) {
     return;  // image is totally off the screen, do nothing
   }
-  if ((w > _width) ||
-      (h > _height)) {  // image is too wide for the screen, do nothing
+  if ((w > _width)/* ||
+      (h > _height)*/) {  // image is too wide for the screen, do nothing
     //***This isn't necessarily a fatal error, but it makes the
     // following logic much more complicated, since you can have
     // an image that exceeds multiple boundaries and needs to be
